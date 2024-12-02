@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:weatherapp/domain/cuibt/theme_cuibt/theme_cuibt.dart';
-import 'package:weatherapp/domain/presentation/widgets/theme_toggle_button.dart';
+import 'package:weatherapp/domain/presentation/screens/search_screen.dart';
+import 'package:weatherapp/domain/presentation/screens/weather_screen.dart';
 
 void main() {
   runApp(MultiBlocProvider(providers: [
     BlocProvider(
       create: (context) => ThemeCubit(),
     )
-  ], child: const MyApp()));
+  ], child: const WeatherApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class WeatherApp extends StatelessWidget {
+  const WeatherApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -24,27 +25,13 @@ class MyApp extends StatelessWidget {
           darkTheme: ThemeData.light(),
           themeMode:
               state == ThemeState.light ? ThemeMode.light : ThemeMode.dark,
-          home: const HomePage(),
+          routes: {
+            WeatherScreen.id: (context) => WeatherScreen(),
+            SearchScreen.id: (context) => SearchScreen(),
+          },
+          initialRoute: WeatherScreen.id,
         );
       },
-    );
-  }
-}
-
-class HomePage extends StatelessWidget {
-  const HomePage({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Theme Mode',
-        ),
-        actions: const [ThemeToggleButton()],
-      ),
     );
   }
 }
