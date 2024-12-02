@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:weatherapp/domain/cuibt/theme_cuibt/theme_cuibt.dart';
+import 'package:weatherapp/domain/presentation/widgets/theme_toggle_button.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiBlocProvider(providers: [
+    BlocProvider(
+      create: (context) => ThemeCubit(),
+    )
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,6 +17,34 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp();
+    return BlocBuilder<ThemeCubit, ThemeState>(
+      builder: (context, state) {
+        return MaterialApp(
+          theme: ThemeData.dark(),
+          darkTheme: ThemeData.light(),
+          themeMode:
+              state == ThemeState.light ? ThemeMode.light : ThemeMode.dark,
+          home: const HomePage(),
+        );
+      },
+    );
+  }
+}
+
+class HomePage extends StatelessWidget {
+  const HomePage({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Theme Mode',
+        ),
+        actions: const [ThemeToggleButton()],
+      ),
+    );
   }
 }
